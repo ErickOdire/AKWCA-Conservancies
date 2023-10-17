@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/AKWCAConservancies_1.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        map.createPane('pane_GoogleSatellite_0');
+        map.getPane('pane_GoogleSatellite_0').style.zIndex = 400;
+        var layer_GoogleSatellite_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatellite_0',
+            opacity: 1.0,
+            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_GoogleSatellite_0;
+        map.addLayer(layer_GoogleSatellite_0);
+        function pop_AKWCAConservancies_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">id</th>\
+                        <td>' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">consv_name</th>\
+                        <td>' + (feature.properties['consv_name'] !== null ? autolinker.link(feature.properties['consv_name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">umbrla_org</th>\
+                        <td>' + (feature.properties['umbrla_org'] !== null ? autolinker.link(feature.properties['umbrla_org'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">county</th>\
+                        <td>' + (feature.properties['county'] !== null ? autolinker.link(feature.properties['county'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">proposd_by</th>\
+                        <td>' + (feature.properties['proposd_by'] !== null ? autolinker.link(feature.properties['proposd_by'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">data_sourc</th>\
+                        <td>' + (feature.properties['data_sourc'] !== null ? autolinker.link(feature.properties['data_sourc'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">consv_type</th>\
+                        <td>' + (feature.properties['consv_type'] !== null ? autolinker.link(feature.properties['consv_type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">consv_mode</th>\
+                        <td>' + (feature.properties['consv_mode'] !== null ? autolinker.link(feature.properties['consv_mode'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">land_use</th>\
+                        <td>' + (feature.properties['land_use'] !== null ? autolinker.link(feature.properties['land_use'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">land_tenur</th>\
+                        <td>' + (feature.properties['land_tenur'] !== null ? autolinker.link(feature.properties['land_tenur'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">pri_ten_ty</th>\
+                        <td>' + (feature.properties['pri_ten_ty'] !== null ? autolinker.link(feature.properties['pri_ten_ty'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">legal_enti</th>\
+                        <td>' + (feature.properties['legal_enti'] !== null ? autolinker.link(feature.properties['legal_enti'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">status</th>\
+                        <td>' + (feature.properties['status'] !== null ? autolinker.link(feature.properties['status'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">rsh_to_ten</th>\
+                        <td>' + (feature.properties['rsh_to_ten'] !== null ? autolinker.link(feature.properties['rsh_to_ten'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">calc_area</th>\
+                        <td>' + (feature.properties['calc_area'] !== null ? autolinker.link(feature.properties['calc_area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">area_given</th>\
+                        <td>' + (feature.properties['area_given'] !== null ? autolinker.link(feature.properties['area_given'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">membership</th>\
+                        <td>' + (feature.properties['membership'] !== null ? autolinker.link(feature.properties['membership'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">estab_date</th>\
+                        <td>' + (feature.properties['estab_date'] !== null ? autolinker.link(feature.properties['estab_date'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_AKWCAConservancies_1_0() {
+            return {
+                pane: 'pane_AKWCAConservancies_1',
+                opacity: 1,
+                color: 'rgba(73,222,19,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AKWCAConservancies_1');
+        map.getPane('pane_AKWCAConservancies_1').style.zIndex = 401;
+        map.getPane('pane_AKWCAConservancies_1').style['mix-blend-mode'] = 'normal';
+        var layer_AKWCAConservancies_1 = new L.geoJson(json_AKWCAConservancies_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AKWCAConservancies_1',
+            layerName: 'layer_AKWCAConservancies_1',
+            pane: 'pane_AKWCAConservancies_1',
+            onEachFeature: pop_AKWCAConservancies_1,
+            style: style_AKWCAConservancies_1_0,
+        });
+        bounds_group.addLayer(layer_AKWCAConservancies_1);
+        map.addLayer(layer_AKWCAConservancies_1);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/AKWCAConservancies_1.png" /> AKWCA Conservancies': layer_AKWCAConservancies_1,"Google Satellite": layer_GoogleSatellite_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_AKWCAConservancies_1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['consv_name'] !== null?String('<div style="color: #ffffff; font-size: 15pt; font-family: \'Frutiger\', sans-serif;">' + layer.feature.properties['consv_name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_AKWCAConservancies_1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        map.addControl(new L.Control.Search({
+            layer: layer_AKWCAConservanciesBoundary_1,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'consv_name'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        resetLabels([layer_AKWCAConservancies_1]);
+        map.on("zoomend", function(){
+            resetLabels([layer_AKWCAConservancies_1]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_AKWCAConservancies_1]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_AKWCAConservancies_1]);
+        });
+        </script>
+    </body>
+</html>
